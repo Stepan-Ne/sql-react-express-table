@@ -73,12 +73,11 @@ function Table() {
       .then((response) => response.json())
       .then((data) => {
         if (data.hasOwnProperty('calc')) {
-          setCalcValue(data.calc)
+          setCalcValue(data.calc);
         }
         if (data.hasOwnProperty('message')) {
           alert(data.message);
         }
-       
       });
   };
 

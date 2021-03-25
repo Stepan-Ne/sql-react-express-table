@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 
 function TableRow({ id, dateReg, dateLastActiv, fetchData }) {
- 
   const delUser = (id) => {
     fetch(`/api/user/${id}`, { method: 'DELETE' })
       .then((response) => response.json())
@@ -11,7 +10,7 @@ function TableRow({ id, dateReg, dateLastActiv, fetchData }) {
           fetchData();
         }
         if (data.hasOwnProperty('message')) {
-alert(data.message)
+          alert(data.message);
         }
       });
   };

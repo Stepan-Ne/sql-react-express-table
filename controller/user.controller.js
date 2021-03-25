@@ -17,7 +17,7 @@ class UserController {
       const sql = 'DELETE FROM tableApp WHERE id = $1';
       const { id } = req.params;
       const result = await db.query(sql, [id]);
-      res.json({result: 'user was delete'});
+      res.json({ result: 'user was delete' });
     } catch (e) {
       res.json({ message: 'The Matrix has you...' });
     }

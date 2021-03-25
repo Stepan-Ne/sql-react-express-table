@@ -1,7 +1,7 @@
 import express from 'express';
 // import cors from 'cors';
-import db from './dbConfig.js'
-import path  from 'path';
+import db from './dbConfig.js';
+import path from 'path';
 // import items from './items.js';
 import userRoutes from './routes/user.routes.js';
 
@@ -18,7 +18,7 @@ app.use(express.json());
 // })
 
 // Use Routes
-app.use('/api', userRoutes)
+app.use('/api', userRoutes);
 
 // If PRODUCTION
 if (process.env.NODE_ENV === 'production') {
@@ -26,13 +26,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
   app.get('*', (req, res) => {
-res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-  })
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 const PORT = process.env.PORT || 5000;
 
-
 app.listen(PORT, () => {
   console.log('Server is running...');
-})
+});
