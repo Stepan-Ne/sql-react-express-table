@@ -7,8 +7,11 @@ function TableRow({ id, dateReg, dateLastActiv, fetchData }) {
     fetch(`/api/user/${id}`, { method: 'DELETE' })
       .then((response) => response.json())
       .then((data) => {
-        if (data.message === 'user was delete') {
+        if (data.hasOwnProperty('result')) {
           fetchData();
+        }
+        if (data.hasOwnProperty('message')) {
+alert(data.message)
         }
       });
   };

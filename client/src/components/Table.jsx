@@ -20,7 +20,13 @@ function Table() {
       .then((response) => response.json())
       .then((data) => {
         setLoading(false);
-        setState(data.table);
+        if (data.hasOwnProperty('table')) {
+          setState(data.table);
+        }
+        if (data.hasOwnProperty('message')) {
+          alert(data.message);
+        }
+
         setCalcValue('');
       });
   };
@@ -39,8 +45,11 @@ function Table() {
       fetch('/api/user', requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          if (data.message === 'User was add') {
+          if (data.hasOwnProperty('result')) {
             fetchData();
+          }
+          if (data.hasOwnProperty('message')) {
+            alert(data.message);
           }
         });
       setDates({
@@ -62,7 +71,15 @@ function Table() {
   const calculate = () => {
     fetch('/api/user/calc')
       .then((response) => response.json())
-      .then((data) => setCalcValue(data.calc));
+      .then((data) => {
+        if (data.hasOwnProperty('calc')) {
+          setCalcValue(data.calc)
+        }
+        if (data.hasOwnProperty('message')) {
+          alert(data.message);
+        }
+       
+      });
   };
 
   return (
@@ -70,64 +87,65 @@ function Table() {
       {loading ? <Loading /> : null}
 
       <table>
-      <tbody>
-        <tr>
-          <th>UserID</th>
-          <th>Date Registration</th>
-          <th>Date Last Activity</th>
-        </tr>
-        {state
-          ? state.map((row) => (
-              <TableRow
-                fetchData={fetchData}
-                key={row.id}
-                id={row.id}
-                dateReg={row.datereg}
-                dateLastActiv={row.datelastactiv}
+        <tbody>
+          <tr>
+            <th>UserID</th>
+            <th>Date Registration</th>
+            <th>Date Last Activity</th>
+          </tr>
+          {state
+            ? state.map((row) => (
+                <TableRow
+                  fetchData={fetchData}
+                  key={row.id}
+                  id={row.id}
+                  dateReg={row.datereg}
+                  dateLastActiv={row.datelastactiv}
+                />
+              ))
+            : null}
+          <tr>
+            <td>
+              <button
+                onClick={onSaveHandler}
+                className={
+                  dates.dateReg && dates.dateLastActiv ? '' : s.disableBtn
+                }
+                disabled={dates.dateReg && dates.dateLastActiv ? false : true}
+              >
+                {' '}
+                Save
+              </button>
+            </td>
+            <td>
+              <input
+                type='date'
+                name='dateReg'
+                value={dates.dateReg ? dates.dateReg : ''}
+                onChange={onSetDate}
               />
-            ))
-          : null}
-        <tr>
-          <td>
-            <button
-              onClick={onSaveHandler}
-              className={
-                dates.dateReg && dates.dateLastActiv ? '' : s.disableBtn
-              }
-              disabled={dates.dateReg && dates.dateLastActiv ? false : true}
-            >
-              {' '}
-              Save
-            </button>
-          </td>
-          <td>
-            <input
-              type='date'
-              name='dateReg'
-              value={dates.dateReg ? dates.dateReg : ''}
-              onChange={onSetDate}
-            />
-          </td>
-          <td>
-            <input
-              type='date'
-              name='dateLastActiv'
-              value={dates.dateLastActiv ? dates.dateLastActiv : ''}
-              onChange={onSetDate}
-            />
-          </td>
-        </tr>
-        <tr>
-          <td colSpan='2'>
-            <b>
-              Rolling Retention 7 day is {calcValue ? calcValue + ' %' : '...'}
-            </b>
-          </td>
+            </td>
+            <td>
+              <input
+                type='date'
+                name='dateLastActiv'
+                value={dates.dateLastActiv ? dates.dateLastActiv : ''}
+                onChange={onSetDate}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colSpan='2'>
+              <b>
+                Rolling Retention 7 day is{' '}
+                {calcValue ? calcValue + ' %' : '...'}
+              </b>
+            </td>
 
-          <td>
-            <button onClick={calculate}> Calculate</button>
-          </td>
-        </tr>
+            <td>
+              <button onClick={calculate}> Calculate</button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </>
